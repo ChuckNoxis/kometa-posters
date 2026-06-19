@@ -11,6 +11,34 @@ from PIL import Image
 from plexapi.exceptions import Unauthorized
 from plexapi.server import PlexServer
 
+def optimize_image(path):
+    path = Path(path)
+
+    try:
+        img = Image.open(path)
+
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+
+        img.thumbnail((750, 1125))
+
+        new_path = path.with_suffix(".jpg")
+
+        img.save(
+            new_path,
+            "JPEG",
+            quality=80,
+            optimize=True,
+        )
+
+        if new_path != path:
+            path.unlink()
+
+        return str(new_path)
+
+    except Exception as ex:
+        print(f"Image optimization failed on {path}: {ex}")
+        return str(path)
 
 def has_overlay(image_path):
     kometa_overlay = False

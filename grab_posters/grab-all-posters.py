@@ -13,6 +13,7 @@ from alive_progress import alive_bar
 from database import add_key, add_last_run, add_url, check_key, check_url, get_last_run
 from helpers import (
     booler,
+    optimize_image,
     check_for_images,
     get_all_from_library,
     get_ids,
@@ -678,6 +679,7 @@ def process_the_thing(params):
                     time.sleep(DELAY)
 
                     local_file = str(rename_by_type(final_file_path))
+                    local_file = optimize_image(local_file)
 
                     if not KEEP_JUNK:
                         if local_file.find('.del') > 0:
